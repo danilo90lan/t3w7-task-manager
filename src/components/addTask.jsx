@@ -17,11 +17,11 @@ export default function AddTask() {
             title,
             description
         };
-
-        navigate("/tasks");
-
         //append the new task
         setTasks([...tasks, newTask]);
+        navigate("/tasks");
+
+        
     }
 
     return (

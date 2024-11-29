@@ -1,12 +1,34 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useLocalStorage } from "react-use";
 
 
 export default function Tasks() {
-    return(
+    const [tasks, setTasks] = useLocalStorage("tasks", []);
+
+
+    return (
         <div>
             <h2>Tasks</h2>
-            <p>Here, you can see a list of tasks in the task manager</p>
-            
+            {
+                tasks.length === 0 ? (
+                    <p>No tasks found. <Link to="/add-task">Add your first task</Link></p>
+                ) : (
+                    <ul>
+                        {tasks.map((task, index) => {
+                            return (
+                                <li key={index}>
+                                    <strong>{task.title}</strong>:{task.description}
+                                    <div>
+                                        <Link to={`/edit-task/${task.id}`}>Edit</Link> | {" "}
+                                    </div>
+                                </li>)
+                        }
+                        )}
+                    </ul>
+                )
+            }
+
         </div>
     )
 }
