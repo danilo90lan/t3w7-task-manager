@@ -18,17 +18,22 @@ export default function EditTask() {
         } else {
             // Navigate back if task not found
             navigate("/tasks");
+            console.warn("Task not found");
         }
-    }, [taskId, tasks, navigate]);
+    }, [taskId, tasks]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         // Update the task in the tasks list
-        const updatedTasks = tasks.map((task) =>
-            task.id === Number(taskId)
-                ? { ...task, title, description }
-                : task
+        const updatedTasks = tasks.map((task) => {
+            if (task.id === Number(taskId)) {
+                return { ...task, title, description };
+            }
+            else {
+                return task;
+            }
+         }
         );
 
         setTasks(updatedTasks);

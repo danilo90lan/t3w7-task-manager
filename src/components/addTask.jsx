@@ -7,7 +7,6 @@ export default function AddTask() {
     const [description, setDescription] = useState("");
 
     const [tasks, setTasks] = useLocalStorage("tasks", [])
-    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
