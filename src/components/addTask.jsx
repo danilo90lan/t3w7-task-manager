@@ -14,13 +14,15 @@ export default function AddTask() {
 
         const newTask = {
             id: Date.now(),
-            title,
-            description
+            title: title,
+            description: description
         };
         //append the new task
         setTasks([...tasks, newTask]);
-        navigate("/tasks");
-
+         // Reset the form by clearing the state values
+         setTitle("");
+         setDescription("");
+        
         
     }
 

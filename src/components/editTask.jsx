@@ -1,16 +1,66 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useLocalStorage } from "react-use";
 
 export default function EditTask() {
-    //use query param it returns the key value pair. It will be destructure with 
-    // the curly brackets and get only the taskID
     const { taskId } = useParams();
+    const [tasks, setTasks] = useLocalStorage("tasks", []);
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const navigate = useNavigate();
+
+    // Load the task details when the component mounts
+    useEffect(() => {
+        const taskToEdit = tasks.find((task) => task.id === Number(taskId));
+        if (taskToEdit) {
+            setTitle(taskToEdit.title);
+            setDescription(taskToEdit.description);
+        } else {
+            // Navigate back if task not found
+            navigate("/tasks");
+        }
+    }, [taskId, tasks, navigate]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        // Update the task in the tasks list
+        const updatedTasks = tasks.map((task) =>
+            task.id === Number(taskId)
+                ? { ...task, title, description }
+                : task
+        );
+
+        setTasks(updatedTasks);
+        navigate("/tasks"); // Redirect to tasks page
+    };
 
     return (
         <div>
             <h2>Edit Task</h2>
-            <p>Task ID: {taskId}</p>
-            <p>Here, you'll view or edit the task details</p>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Title: </label>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label>Description: </label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <button type="submit">Save Changes</button>
+            </form>
         </div>
-    )
+    );
 }
